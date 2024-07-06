@@ -96,7 +96,7 @@ ErrorOr<void> Cmap::Subtable::validate_format_can_be_read() const
     case Format::SegmentedCoverage:
         return {};
     default:
-        return Error::from_string_view("Unimplemented cmap format"sv);
+        return Error::from_string_literal("Unimplemented cmap format");
     }
 }
 

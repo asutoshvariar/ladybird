@@ -445,13 +445,13 @@ void Element::run_attribute_change_steps(FlyString const& local_name, Optional<S
     attribute_change_steps(local_name, old_value, value, namespace_);
 
     // AD-HOC: Run our own internal attribute change handler.
-    attribute_changed(local_name, value);
+    attribute_changed(local_name, old_value, value);
     invalidate_style_after_attribute_change(local_name);
 
     document().bump_dom_tree_version();
 }
 
-void Element::attribute_changed(FlyString const& name, Optional<String> const& value)
+void Element::attribute_changed(FlyString const& name, Optional<String> const&, Optional<String> const& value)
 {
     auto value_or_empty = value.value_or(String {});
 
@@ -1871,7 +1871,7 @@ ErrorOr<void> Element::scroll_into_view(Optional<Variant<bool, ScrollIntoViewOpt
     // 6. If the element does not have any associated box, or is not available to user-agent features, then return.
     document().update_layout();
     if (!layout_node())
-        return Error::from_string_view("Element has no associated box"sv);
+        return Error::from_string_literal("Element has no associated box");
 
     // 7. Scroll the element into view with behavior, block, and inline.
     TRY(scroll_an_element_into_view(*this, behavior, block, inline_));
